@@ -6,7 +6,7 @@ import os
 
 def extract_mel_spectrogram(audio_path, output_image_path, n_mels=128, hop_length=512, sr=22050):
     """
-    Extrai o Mel-spectrograma de uma música e salva como imagem.
+    Extrai o Mel-spectrograma de uma música e salva como imagem, sem bordas brancas.
     
     :param audio_path: Caminho para o arquivo de áudio.
     :param output_image_path: Caminho para salvar o Mel-spectrograma como imagem.
@@ -24,21 +24,21 @@ def extract_mel_spectrogram(audio_path, output_image_path, n_mels=128, hop_lengt
         # Converter para escala logarítmica (dB)
         mel_spectrogram_db = librosa.power_to_db(mel_spectrogram, ref=np.max)
         
-        # Configurar o gráfico
-        plt.figure(figsize=(10, 4))
-        librosa.display.specshow(mel_spectrogram_db, sr=sr, hop_length=hop_length, x_axis='time', y_axis='mel')
-        plt.colorbar(format='%+2.0f dB')
-        plt.title('Mel-Spectrogram')
-        plt.tight_layout()
+        # Configurar o gráfico sem bordas
+        plt.figure(figsize=(10, 4), dpi=300)  # Aumentar o DPI para maior qualidade
+        plt.axis('off')  # Remover os eixos
+        librosa.display.specshow(mel_spectrogram_db, sr=sr, hop_length=hop_length, cmap='viridis')  # Escolha um cmap agradável
         
-        # Salvar o Mel-spectrograma como imagem
+        # Salvar o gráfico diretamente sem bordas
         os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
-        plt.savefig(output_image_path)
+        plt.savefig(output_image_path, bbox_inches='tight', pad_inches=0)
         plt.close()
+        
         print(f"Mel-spectrograma salvo em: {output_image_path}")
     
     except Exception as e:
         print(f"Erro ao processar {audio_path}: {e}")
+
 
 def process_folder(input_folder, output_folder, n_mels=128, hop_length=512, sr=22050):
     """
@@ -74,5 +74,5 @@ def process_folder(input_folder, output_folder, n_mels=128, hop_length=512, sr=2
 
 # Exemplo de uso
 input_folder = "/home/andrey/UNIR/Sexto_Periodo/Tonify/musicas"  # Substitua pelo caminho da pasta com músicas
-output_folder = "/home/andrey/UNIR/Sexto_Periodo/Tonify/espectogramas"  # Substitua pelo caminho da pasta para salvar os espectrogramas
+output_folder = "/home/andrey/UNIR/Sexto_Periodo/Tonify/espectrogramas"  # Substitua pelo caminho da pasta para salvar os espectrogramas
 process_folder(input_folder, output_folder)
