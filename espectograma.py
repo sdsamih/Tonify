@@ -71,7 +71,7 @@ def process_folder(input_folder, output_folder, n_mels=128, hop_length=512, sr=2
             
         if(index%10==0):
             print(f"Processando Espectrogamas {index}/{len(os.listdir(input_folder))}")
-            extract_mel_spectrogram(input_path, output_path, n_mels=n_mels, hop_length=hop_length, sr=sr)
+        extract_mel_spectrogram(input_path, output_path, n_mels=n_mels, hop_length=hop_length, sr=sr)
 
 # Exemplo de uso
 input_folder = "musicas"  # Substitua pelo caminho da pasta com músicas
