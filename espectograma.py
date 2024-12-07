@@ -34,7 +34,7 @@ def extract_mel_spectrogram(audio_path, output_image_path, n_mels=128, hop_lengt
         plt.savefig(output_image_path, bbox_inches='tight', pad_inches=0)
         plt.close()
         
-        print(f"Mel-spectrograma salvo em: {output_image_path}")
+        #print(f"Mel-spectrograma salvo em: {output_image_path}")
     
     except Exception as e:
         print(f"Erro ao processar {audio_path}: {e}")
@@ -58,7 +58,7 @@ def process_folder(input_folder, output_folder, n_mels=128, hop_length=512, sr=2
     os.makedirs(output_folder, exist_ok=True)
     
     # Iterar sobre todos os arquivos na pasta de entrada
-    for file_name in os.listdir(input_folder):
+    for index, file_name in enumerate(os.listdir(input_folder)):
         # Verificar se é um arquivo de áudio
         if file_name.endswith(('.mp3', '.wav', '.flac', '.ogg')):
             input_path = os.path.join(input_folder, file_name)
@@ -69,10 +69,11 @@ def process_folder(input_folder, output_folder, n_mels=128, hop_length=512, sr=2
                 print(f"Já processado: {output_path}")
                 continue  # Ignorar este arquivo
             
-            print(f"Processando: {input_path}")
+        if(index%10==0):
+            print(f"Processando Espectrogamas {index}/{len(os.listdir(input_folder))}")
             extract_mel_spectrogram(input_path, output_path, n_mels=n_mels, hop_length=hop_length, sr=sr)
 
 # Exemplo de uso
-input_folder = "/home/andrey/UNIR/Sexto_Periodo/Tonify/musicas"  # Substitua pelo caminho da pasta com músicas
-output_folder = "/home/andrey/UNIR/Sexto_Periodo/Tonify/espectrogramas"  # Substitua pelo caminho da pasta para salvar os espectrogramas
+input_folder = "musicas"  # Substitua pelo caminho da pasta com músicas
+output_folder = "espectrogramas"  # Substitua pelo caminho da pasta para salvar os espectrogramas
 process_folder(input_folder, output_folder)
